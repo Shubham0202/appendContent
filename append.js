@@ -44,8 +44,18 @@ const server = http.createServer((req, res) => {
             res.writeHead(500, { 'Content-Type': 'text/plain' });
             return res.end('Error appending to the second file.');
           }
-          res.writeHead(200, { 'Content-Type': 'text/plain' });
-          res.end('Content appended successfully!');
+
+          // Delete the first file after appending
+          fs.unlink(file1, (err) => {
+            if (err) {
+              res.writeHead(500, { 'Content-Type': 'text/plain' });
+              return res.end('Error deleting the first file.');
+            }
+            res.writeHead(200, { 'Content-Type': 'text/plain' });
+            res.end('Content appended successfully and first file deleted!');
+          });
+          //ggh
+          
         });
       });
     });
@@ -59,4 +69,3 @@ const server = http.createServer((req, res) => {
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
-
